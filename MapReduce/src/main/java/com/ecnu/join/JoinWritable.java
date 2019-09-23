@@ -1,5 +1,7 @@
-package com.ecnu.join.entity;
+package com.ecnu.join;
 
+import com.ecnu.join.entity.Order;
+import com.ecnu.join.entity.Person;
 import org.apache.hadoop.io.Writable;
 
 import java.io.DataInput;
@@ -9,10 +11,10 @@ import java.io.IOException;
 /**
  * 存储 Person 或 Order 的信息，方便传递信息到 Reducer
  * @author ikroal
- * @date 2019-06-26
- * @version: 1.0.0
+ * @date 2019-09-23
+ * @version: 1.0.1
  */
-public class ReduceJoinWritable implements Writable {
+public class JoinWritable implements Writable {
 
     private Person mPerson;
     private Order mOrder;

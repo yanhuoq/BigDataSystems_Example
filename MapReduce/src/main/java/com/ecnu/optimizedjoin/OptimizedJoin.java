@@ -1,4 +1,4 @@
-package com.ecnu.join.mapjoin;
+package com.ecnu.optimizedjoin;
 
 import org.apache.hadoop.conf.Configured;
 import org.apache.hadoop.fs.Path;
@@ -13,15 +13,15 @@ import org.apache.hadoop.util.ToolRunner;
 import java.net.URI;
 
 /**
- * 实现 Map 端进行 Join 的功能
+ * 通过 Distributed Cache 对 Join 进行优化
  * @author ikroal
- * @date 2019-06-12
- * @version: 1.0.0
+ * @date 2019-09-23
+ * @version: 1.0.1
  */
-public class MapJoin extends Configured implements Tool {
+public class OptimizedJoin extends Configured implements Tool {
 
     public static void main(String[] args) throws Exception {
-        int exitCode = ToolRunner.run(new MapJoin(), args);
+        int exitCode = ToolRunner.run(new OptimizedJoin(), args);
         System.exit(exitCode);
     }
 
@@ -34,13 +34,13 @@ public class MapJoin extends Configured implements Tool {
         Job job = Job.getInstance(getConf(), getClass().getSimpleName());
 
         job.setJarByClass(getClass());
-        //将其中一个小表加载到缓存中
+        //广播小表
         job.addCacheFile(new URI(args[0]));
 
         FileInputFormat.addInputPath(job, new Path(args[1]));
         FileOutputFormat.setOutputPath(job, new Path(args[2]));
 
-        job.setMapperClass(MapJoinMapper.class);
+        job.setMapperClass(OptimizedJoinMapper.class);
         job.setMapOutputKeyClass(Text.class);
         job.setMapOutputValueClass(NullWritable.class);
 

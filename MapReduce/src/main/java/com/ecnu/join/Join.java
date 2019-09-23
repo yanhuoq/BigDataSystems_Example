@@ -1,7 +1,6 @@
-package com.ecnu.join.reducejoin;
+package com.ecnu.join;
 
 import com.ecnu.constants.ConfigurationKey;
-import com.ecnu.join.entity.ReduceJoinWritable;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.conf.Configured;
 import org.apache.hadoop.fs.Path;
@@ -14,15 +13,15 @@ import org.apache.hadoop.util.Tool;
 import org.apache.hadoop.util.ToolRunner;
 
 /**
- * 实现 Reduce 端 Join 的功能
+ * 实现 Join 功能
  * @author ikroal
- * @date 2019-06-11
- * @version: 1.0.0
+ * @date 2019-09-23
+ * @version: 1.0.1
  */
-public class ReduceJoin extends Configured implements Tool {
+public class Join extends Configured implements Tool {
 
     public static void main(String[] args) throws Exception {
-        int exitCode = ToolRunner.run(new ReduceJoin(), args);
+        int exitCode = ToolRunner.run(new Join(), args);
         System.exit(exitCode);
     }
 
@@ -48,11 +47,11 @@ public class ReduceJoin extends Configured implements Tool {
         conf.set(ConfigurationKey.PERSONS_NAME, args[2]);
         conf.set(ConfigurationKey.ORDERS_NAME, args[3]);
 
-        job.setMapperClass(ReduceJoinMapper.class);
-        job.setReducerClass(ReduceJoinReducer.class);
+        job.setMapperClass(JoinMapper.class);
+        job.setReducerClass(JoinReducer.class);
 
         job.setMapOutputKeyClass(Text.class);
-        job.setMapOutputValueClass(ReduceJoinWritable.class);
+        job.setMapOutputValueClass(JoinWritable.class);
 
         job.setOutputKeyClass(Text.class);
         job.setOutputValueClass(NullWritable.class);

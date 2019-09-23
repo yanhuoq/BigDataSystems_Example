@@ -1,4 +1,4 @@
-package com.ecnu.join.mapjoin;
+package com.ecnu.optimizedjoin;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileSystem;
@@ -16,17 +16,17 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * 完成 Map 端 Join
+ * 完成 Join 操作
  * @author ikroal
  * @date 2019-06-12
  * @version: 1.0.0
  */
-public class MapJoinMapper extends Mapper<LongWritable, Text, Text, NullWritable> {
+public class OptimizedJoinMapper extends Mapper<LongWritable, Text, Text, NullWritable> {
     private Map<String, String> mPersonTable = new HashMap<>();
     private static final int DEFAULT_COLUNM = 3;
 
     /**
-     * 从 {@link MapJoin} 设置的缓存表中读取 Person 信息保存到集合当中
+     * 获取广播的小表路径进行处理
      */
     @Override
     protected void setup(Context context) throws IOException {
@@ -35,7 +35,7 @@ public class MapJoinMapper extends Mapper<LongWritable, Text, Text, NullWritable
         BufferedReader reader = new BufferedReader(new InputStreamReader(
                 fs.open(new Path(uri))));
         String content;
-        //处理缓存中的小表
+        //处理缓存中的小表，将解析之后的数据保存在 Map 中
         while ((content = reader.readLine()) != null) {
             String[] datas = content.split("\t");
             String id = datas[0];
